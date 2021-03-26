@@ -41,52 +41,96 @@ def runningDark(count,period):
             GPIO.output(led, 1) 
 
 
-def decToBinList(decNumber):
-    bin_str = bin(decNumber)
-    print(bin_str)
+#---------------------------------------------------------------
 
-    result = [0, 0, 0, 0, 0, 0, 0, 0]
+# first vesion
+'''def decToBinList(dec_num):
+    bin_str = bin(dec_num)
 
-    c = 0
-    for i in range(2, len(bin_str)):
-        result[c] = int(bin_str[i])
-        print(result[c])
-        c = c + 1
-    print(result)
+    bin_str_list = list(bin_str)[2::]
+
+    result = []
+    for num in bin_str_list:
+        result.append(int(num))
+
+    return result'''
+
+# second version
+'''def decToBinList(dec_num):
+    result = []
+
+    while(True):
+
+        frac = dec_num % 2
+        main = dec_num // 2
+
+        result.append(frac)
+        dec_num = dec_num // 2
+
+        if ((main) == 0):
+            break
+
+    result.reverse()
+
+    return result'''
+
+# first version (format output)
+'''def decToBinList(dec_num):
+    bin_str = bin(dec_num)
+    
+    bin_str_list = list(bin_str)[2::]
+
+    result = []
+    for num in bin_str_list:
+        result.append(int(num))
+
+    if (len(result) < 8):
+        for i in range(8 - len(result)):
+            result = [0] + result
+
+    return result'''
+
+# second version (format output)
+def decToBinList(dec_num):
+    result = []
+
+    while(True):
+
+        frac = dec_num % 2
+        main = dec_num // 2
+
+        result.append(frac)
+        dec_num = dec_num // 2
+
+        if ((main) == 0):
+            break
+
+    result.reverse()
+
+    if (len(result) < 8):
+        for i in range(8 - len(result)):
+            result = [0] + result
+
     return result
+
+#---------------------------------------------------------------
 
 def lightNumber(decNumber):
     num = decToBinList(decNumber)
-    print(num)
-    num.reverse()
-    print(num)
+    index_list = []
 
-    led_amount = 0
-    for i in range(8):
-        led_amount += num[i]
-
-    light_led_list = list(range(led_amount))
-    c = 0
-
-    for i in range(8):
+    for i in range(len(num)):
         if (num[i] == 1):
-            light_led_list[c] = chan_list[i]
-            c = c + 1
-    print(light_led_list)
+            index_list.append(i)
+
+    light_led_list = [chan_list[index] for index in index_list]
     
     GPIO.output(light_led_list, 1)
     time.sleep(3)
     GPIO.output(light_led_list, 0)
 
-#def runningPattern(pattern, direction):
-
-
 #==================================================================
 
 
-num = decToBinList(1)
-print(num)
-
-lightNumber(1)
 
 GPIO.cleanup()
