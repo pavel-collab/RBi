@@ -129,6 +129,28 @@ def lightNumber(decNumber):
     time.sleep(3)
     GPIO.output(light_led_list, 0)
 
+def runningPattern(pattern, direction):
+    num = decToBinList(pattern)
+    index_list = []
+
+    for i in range(9):
+        for i in range(len(num)):
+            if (num[i] == 1):
+                index_list.append(i)
+
+        light_led_list = [chan_list[index] for index in index_list]
+    
+        GPIO.output(light_led_list, 1)
+        time.sleep(0.5)
+        GPIO.output(light_led_list, 0)
+        
+        if (direction == 'left'):
+            num = num[1:] + num[:1]
+        elif (direction == 'right'):
+            num = num[-1:] + num[:-1]
+            
+        index_list = []
+
 #==================================================================
 
 
