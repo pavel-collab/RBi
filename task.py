@@ -8,8 +8,7 @@ chan_list = [24, 25, 8, 7, 12, 16, 20, 21]
 
 GPIO.setup(chan_list, GPIO.OUT)
 
-for led in chan_list:
-    GPIO.output(led, 0)
+GPIO.output(chan_list, 0)
 
 def lightUp(ledNumber, period):
     GPIO.output(chan_list[ledNumber], 1)
@@ -152,6 +151,32 @@ def runningPattern(pattern, direction):
         index_list = []
 
 #==================================================================
+
+# =-_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_-
+
+def PWM_light_control(ledNumber):
+    GPIO_PWM_0 = chan_list[ledNumber]                   # рабочий канал
+    FREQUENCY = 45                                      # частота
+    DELAY_TIME = 0.00001                                # время задержки
+    
+    pwmOutput_0 = GPIO.PWM(GPIO_PWM_0, FREQUENCY)       # создаем объект для работы с каналом PWM
+    pwmOutput_0.start(0)                                # начальный коэффициент заполнения 0
+    
+    
+    try:
+        while True:
+            for dutyCycle in range(0, 101, 1):
+                #print("up")
+                pwmOutput_0.ChangeDutyCycle(dutyCycle)  # меняем коэффициент заполнения
+                time.sleep(DELAY_TIME) 
+            for dutyCycle in range(100, -1, -1):
+                #print("down")
+                pwmOutput_0.ChangeDutyCycle(dutyCycle)
+                time.sleep(DELAY_TIME)
+    except KeyboardInterrupt:
+        pwmOutput_0.stop()                              # прерывание: ctrl + C
+
+# =-_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_-
 
 
 
