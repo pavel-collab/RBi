@@ -19,7 +19,7 @@ DELAY = 0.05
 
 try:
 
-    repetitionsNumber = int(input("number of repetitions: "))
+    repetitionsNumber = int(input("input number of repetitions: "))
     assert repetitionsNumber > 0
 
     for i in range (0, repetitionsNumber):

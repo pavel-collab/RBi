@@ -81,6 +81,20 @@ def lightNumber(decNumber):
     time.sleep(3)
     GPIO.output(light_led_list, 0)
 
+def num2dac(value):
+    num = decToBinList(value)
+    index_list = []
+
+    for i in range(len(num)):
+        if (num[i] == 1):
+            index_list.append(i)
+
+    light_led_list = [ledPin[index] for index in index_list]
+    
+    GPIO.output(light_led_list, 1)
+    time.sleep(3)
+    GPIO.output(light_led_list, 0)
+
 def runningPattern(pattern, direction):
     num = decToBinList(pattern)
     index_list = []
