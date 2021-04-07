@@ -52,10 +52,14 @@ def num2dac(value):
 try:
 
     value = int(input('input value (-1 to exit: )'))
+    assert value >= 0
+    assert value <= 255
 
     while (value != -1):
         num2dac(value)
         value = int(input('input value (-1 to exit: )'))
+        assert value >= 0
+        assert value <= 255
 
 except Exception:
     print("Found an error! :(")
