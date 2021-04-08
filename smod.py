@@ -1,4 +1,4 @@
-'''import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time 
 
 GPIO.setmode(GPIO.BCM)
@@ -6,9 +6,16 @@ GPIO.setmode(GPIO.BCM)
 
 chan_list = [24, 25, 8, 7, 12, 16, 20, 21] 
 
-GPIO.setup(chan_list, GPIO.OUT)
 
-GPIO.output(chan_list, 0)'''
+ledPin=[10, 9, 11, 5, 6, 13, 19, 26]
+NLed = 8 
+
+GPIO.setup(chan_list, GPIO.OUT)
+GPIO.output(chan_list, 0)
+
+GPIO.setup(ledPin, GPIO.OUT)
+
+GPIO.output(ledPin, 0)
 
 def lightUp(ledNumber, period):
     GPIO.output(chan_list[ledNumber], 1)
@@ -67,22 +74,25 @@ def decToBinList(dec_num):
 
 #---------------------------------------------------------------
 
-def lightNumber(decNumber):
+def lightNumber(decNumber, delay_time):
     num = decToBinList(decNumber)
     index_list = []
+
+    num.reverse()
 
     for i in range(len(num)):
         if (num[i] == 1):
             index_list.append(i)
 
-    light_led_list = [chan_list[index] for index in index_list]
+    light_led_list = [ledPin[index] for index in index_list]
     
     GPIO.output(light_led_list, 1)
-    time.sleep(3)
+    time.sleep(delay_time)
     GPIO.output(light_led_list, 0)
 
 def num2dac(value):
     num = decToBinList(value)
+    num.reverse()
     index_list = []
 
     for i in range(len(num)):
@@ -92,11 +102,12 @@ def num2dac(value):
     light_led_list = [ledPin[index] for index in index_list]
     
     GPIO.output(light_led_list, 1)
-    time.sleep(3)
-    GPIO.output(light_led_list, 0)
+    #time.sleep(3)
+    #GPIO.output(light_led_list, 0)
 
 def runningPattern(pattern, direction):
     num = decToBinList(pattern)
+    num.reverse()
     index_list = []
 
     for i in range(9):
@@ -124,7 +135,7 @@ def runningPattern(pattern, direction):
 def PWM_light_control(ledNumber):
     GPIO_PWM_0 = chan_list[ledNumber]                   # рабочий канал
     FREQUENCY = 45                                      # частота
-    DELAY_TIME = 0.00001                                # время задержки
+    DELAY_TIME = 0.01                                # время задержки
     
     pwmOutput_0 = GPIO.PWM(GPIO_PWM_0, FREQUENCY)       # создаем объект для работы с каналом PWM
     pwmOutput_0.start(0)                                # начальный коэффициент заполнения 0
@@ -147,4 +158,4 @@ def PWM_light_control(ledNumber):
 
 
 
-'''GPIO.cleanup()'''
+GPIO.cleanup()

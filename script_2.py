@@ -5,6 +5,7 @@ import smod
 
 GPIO.setmode(GPIO.BCM)
 
+# change chan_list to ledList
 
 ledPin=[10, 9, 11, 5, 6, 13, 19, 26]
 NLed = 8 
@@ -25,18 +26,14 @@ try:
     for i in range (0, repetitionsNumber):
         for j in range(MIN, MAX):
             smod.lightNumber(MIN + j)
-            time.sleep(DELAY)
-            smod.lightNumber(0)
+            #time.sleep(DELAY)
+            #smod.lightNumber(0)
         for j in range (MIN, MAX):
             smod.lightNumber(MAX - j)
-            time.sleep(DELAY)
-            smod.lightNumber(0)
-
-except Exception:
-    print("Found an error! :(")
-else:
-    print("There are no errors! :)")
+            #time.sleep(DELAY)
+            #smod.lightNumber(0)
 finally:
     print("The end of program.")
+    GPIO.output(ledPin, 0)
 
 GPIO.cleanup()

@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-import time 
+from time import sleep
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,16 +23,16 @@ MIN = 0
 MAX = 255
 DELAY = 0.05
 
-#TIME = 
-#FREQUENCY = 
-#samplingFrequency =
+TIME = 2
+FREQUENCY = 2  
+samplingFrequency = 1000
 
 try: 
 
     step_time = float(1/float(samplingFrequency))
 
     time = np.arange(0, TIME, step_time)
-    amplitude = np.sin(2 * PI * FREQUENCY * time) # sin(wt), где w = 2pi * f
+    amplitude = 0.5 * (1 + np.sin(2 * PI * FREQUENCY * time)) # sin(wt), где w = 2pi * f
 
     plt.plot(time, amplitude)
     plt.title('Синус')
@@ -44,20 +44,15 @@ try:
     ans = input()
 
     if (ans == 'N'):
-        break
-    else if (ans == 'Y'):
+        print("Exit!")
+    elif (ans == 'Y'):
         for val in amplitude:
-            smod.lightNumber(val)
-            time.sleep(step_time)
-            smod.lightNumber(0)
+            smod.lightNumber(int(val * 255), step_time)
     else:
         print("error!")
 
-except Exception:
-    print("Found an error! :(")
-else:
-    print("There are no errors! :)")
 finally:
     print("The end of program.")
 
 GPIO.cleanup()
+
