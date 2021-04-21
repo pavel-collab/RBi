@@ -1,28 +1,21 @@
 import RPi.GPIO as GPIO
 from time import sleep
-
 import numpy as np
 import matplotlib.pyplot as plt
-#from time import sleep
 
 import smod
 
 GPIO.setmode(GPIO.BCM)
-
+GPIO.setup(ledPin, GPIO.OUT)
+GPIO.output(ledPin, 0)
 
 ledPin=[10, 9, 11, 5, 6, 13, 19, 26]
 NLed = 8 
 
-GPIO.setup(ledPin, GPIO.OUT)
-
-GPIO.output(ledPin, 0)
-
 PI = 3.14
-
 MIN = 0
 MAX = 255
 DELAY = 0.05
-
 TIME = 2
 FREQUENCY = 2  
 samplingFrequency = 1000
@@ -47,7 +40,7 @@ try:
         print("Exit!")
     elif (ans == 'Y'):
         for val in amplitude:
-            smod.lightNumber(int(val * 255), step_time)
+            smod.lightNumber(int(val * 255), step_time, ledPin)
     else:
         print("error!")
 

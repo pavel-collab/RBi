@@ -13,38 +13,39 @@ GPIO.setup(chan_list, GPIO.OUT)
 GPIO.output(chan_list, 0)
 
 GPIO.setup(ledPin, GPIO.OUT)
-
 GPIO.output(ledPin, 0)
 
-# зажигает светодиод номер ledNumber на время period 
-def lightUp(ledNumber, period):
-    GPIO.output(chan_list[ledNumber], 1)
+# зажигает светодиод номер ledNumber из списка D_list на время period
+def lightUp(ledNumber, period, D_list):
+    GPIO.output(D_list[ledNumber], 1)
     time.sleep(period)
-    GPIO.output(chan_list[ledNumber], 0)
+    GPIO.output(D_list[ledNumber], 0)
 
-# мигает светодиодом номер ledNumber, blinkCount раз с периодом blinkPeriod
-def blink(ledNumber, blinkCount, blinkPeriod):
+# мигает светодиодом номер ledNumber из списка D_list, blinkCount раз с периодом blinkPeriod
+def blink(ledNumber, blinkCount, blinkPeriod, D_list):
     for i in range(blinkCount):
-        GPIO.output(chan_list[ledNumber], 1)
+        GPIO.output(D_list[ledNumber], 1)
         time.sleep(blinkPeriod)
-        GPIO.output(chan_list[ledNumber], 0)
+        GPIO.output(D_list[ledNumber], 0)
         time.sleep(blinkPeriod)
 
-# зажигает по порядку один светодиод за другим count раз (светодиод горит period секудн) 
-def runningLight(count, period):
+# зажигает по порядку один светодиод за другим count раз (светодиод горит period секудн)
+# D_list -- список используемых диодов
+def runningLight(count, period, D_list):
     for i in range(count):
-        for led in chan_list:
+        for led in D_list:
             GPIO.output(led, 1)
             time.sleep(period)
             GPIO.output(led, 0)
 
 # гасит по порядку один светодиод за другим count раз (светодиод не горит period секудн)
-def runningDark(count,period):
-    for led in chan_list:
+# D_list -- список используемых диодов
+def runningDark(count, period, D_list):
+    for led in D_list:
         GPIO.output(led, 1)
 
     for i in range(count):
-        for led in chan_list:
+        for led in D_list:
             GPIO.output(led, 0)
             time.sleep(period)
             GPIO.output(led, 1) 
@@ -78,24 +79,25 @@ def decToBinList(dec_num):
 #---------------------------------------------------------------
 
 # зажигает светодиодами узор, соответствующий представлению числа decNum в двоичной системе
-def lightNumber(decNumber, delay_time):
+# D_list -- список используемых диодов
+def lightNumber(decNumber, delay_time, D_list):
     num = decToBinList(decNumber)
-    index_list = []
-
     num.reverse()
+    index_list = []
 
     for i in range(len(num)):
         if (num[i] == 1):
             index_list.append(i)
 
-    light_led_list = [ledPin[index] for index in index_list]
+    light_led_list = [D_list[index] for index in index_list]
     
     GPIO.output(light_led_list, 1)
     time.sleep(delay_time)
     GPIO.output(light_led_list, 0)
 
 # зажигает светодиодами узор, соответствующий представлению числа decNum в двоичной системе
-def num2dac(value):
+# D_list -- список используемых диодов
+def num2dac(value, D_list):
     num = decToBinList(value)
     num.reverse()
     index_list = []
@@ -104,11 +106,9 @@ def num2dac(value):
         if (num[i] == 1):
             index_list.append(i)
 
-    light_led_list = [ledPin[index] for index in index_list]
+    light_led_list = [D_list[index] for index in index_list]
     
     GPIO.output(light_led_list, 1)
-    #time.sleep(3)
-    #GPIO.output(light_led_list, 0)
 
 
 # циклично сдвигает "узор", соответсвующий числу pattern в двоичном представлении

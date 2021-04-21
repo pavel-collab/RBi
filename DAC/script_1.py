@@ -8,9 +8,7 @@ ledPin=[10, 9, 11, 5, 6, 13, 19, 26]
 NLed = 8 
 
 GPIO.setmode(GPIO.BCM)
-
 GPIO.setup(ledPin, GPIO.OUT)
-
 GPIO.output(ledPin, 0)
 
 #==========================================================================
@@ -22,7 +20,7 @@ try:
     assert value <= 255
 
     while (value != -1):
-        smod.num2dac(value)
+        smod.num2dac(value, ledPin)
         value = int(input('input value (-1 to exit): '))
         assert (value >= 0) | (value == -1)
         assert value <= 255
