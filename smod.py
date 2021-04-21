@@ -5,9 +5,8 @@ GPIO.setmode(GPIO.BCM)
 
 
 chan_list = [24, 25, 8, 7, 12, 16, 20, 21] 
-
-
 ledPin=[10, 9, 11, 5, 6, 13, 19, 26]
+
 NLed = 8 
 
 GPIO.setup(chan_list, GPIO.OUT)
@@ -17,11 +16,13 @@ GPIO.setup(ledPin, GPIO.OUT)
 
 GPIO.output(ledPin, 0)
 
+# зажигает светодиод номер ledNumber на время period 
 def lightUp(ledNumber, period):
     GPIO.output(chan_list[ledNumber], 1)
     time.sleep(period)
     GPIO.output(chan_list[ledNumber], 0)
 
+# мигает светодиодом номер ledNumber, blinkCount раз с периодом blinkPeriod
 def blink(ledNumber, blinkCount, blinkPeriod):
     for i in range(blinkCount):
         GPIO.output(chan_list[ledNumber], 1)
@@ -29,6 +30,7 @@ def blink(ledNumber, blinkCount, blinkPeriod):
         GPIO.output(chan_list[ledNumber], 0)
         time.sleep(blinkPeriod)
 
+# зажигает по порядку один светодиод за другим count раз (светодиод горит period секудн) 
 def runningLight(count, period):
     for i in range(count):
         for led in chan_list:
@@ -36,6 +38,7 @@ def runningLight(count, period):
             time.sleep(period)
             GPIO.output(led, 0)
 
+# гасит по порядку один светодиод за другим count раз (светодиод не горит period секудн)
 def runningDark(count,period):
     for led in chan_list:
         GPIO.output(led, 1)
@@ -49,7 +52,7 @@ def runningDark(count,period):
 
 #---------------------------------------------------------------
 
-# second version (format output)
+# переводит число dec_num из десятичной системы в двоичную, возвращает список длиной 8
 def decToBinList(dec_num):
     result = []
 
@@ -74,6 +77,7 @@ def decToBinList(dec_num):
 
 #---------------------------------------------------------------
 
+# зажигает светодиодами узор, соответствующий представлению числа decNum в двоичной системе
 def lightNumber(decNumber, delay_time):
     num = decToBinList(decNumber)
     index_list = []
@@ -90,6 +94,7 @@ def lightNumber(decNumber, delay_time):
     time.sleep(delay_time)
     GPIO.output(light_led_list, 0)
 
+# зажигает светодиодами узор, соответствующий представлению числа decNum в двоичной системе
 def num2dac(value):
     num = decToBinList(value)
     num.reverse()
@@ -105,6 +110,9 @@ def num2dac(value):
     #time.sleep(3)
     #GPIO.output(light_led_list, 0)
 
+
+# циклично сдвигает "узор", соответсвующий числу pattern в двоичном представлении
+# смещение узора происходит влево или вправо в зависимости от direction
 def runningPattern(pattern, direction):
     num = decToBinList(pattern)
     num.reverse()
@@ -132,10 +140,11 @@ def runningPattern(pattern, direction):
 
 # =-_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_-
 
+# контроль яркости светодиода номер ledNumber спомощью ШИМ
 def PWM_light_control(ledNumber):
     GPIO_PWM_0 = chan_list[ledNumber]                   # рабочий канал
     FREQUENCY = 45                                      # частота
-    DELAY_TIME = 0.01                                # время задержки
+    DELAY_TIME = 0.01                                   # время задержки
     
     pwmOutput_0 = GPIO.PWM(GPIO_PWM_0, FREQUENCY)       # создаем объект для работы с каналом PWM
     pwmOutput_0.start(0)                                # начальный коэффициент заполнения 0
@@ -155,7 +164,5 @@ def PWM_light_control(ledNumber):
         pwmOutput_0.stop()                              # прерывание: ctrl + C
 
 # =-_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_--_-_-
-
-
 
 GPIO.cleanup()
