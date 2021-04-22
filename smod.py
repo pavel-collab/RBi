@@ -98,6 +98,7 @@ def lightNumber(decNumber, delay_time, D_list):
 # зажигает светодиодами узор, соответствующий представлению числа decNum в двоичной системе
 # D_list -- список используемых диодов
 def num2dac(value, D_list):
+    GPIO.output(D_list, 0)
     num = decToBinList(value)
     num.reverse()
     index_list = []
